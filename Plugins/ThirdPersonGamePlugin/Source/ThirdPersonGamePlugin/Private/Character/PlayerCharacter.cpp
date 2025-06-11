@@ -4,13 +4,30 @@
 #include "Character/PlayerCharacter.h"
 #include "Player/PlayerInputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 #include "Enums/InputActionEnums.h"
 
 APlayerCharacter::APlayerCharacter()
 {
 	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
 	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanJump = false;
+
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = true;
+
 	playerInputComponent = CreateDefaultSubobject<UPlayerInputComponent>(TEXT("PlayerInputComponent"));
+
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArm->SetupAttachment(GetRootComponent());
+	SpringArm->TargetArmLength = 300.f;
+	SpringArm->bUsePawnControlRotation = true;
+
+	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ViewCamera"));
+	ViewCamera->SetupAttachment(SpringArm);
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -34,31 +51,25 @@ void APlayerCharacter::Move(const FInputActionValue& value)
 
 	const FVector2D MovementVector = (value.Get<FVector2D>() * movementSpeedMultiplier) * actionSpeed;
 	UE_LOG(LogTemp, Warning, TEXT("move speed multi %f"), movementSpeedMultiplier);
+
 	//if (ActionState != EActionState::EAS_Unoccupied) return;
-	if (GetController())
-	{
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 
-		const FVector Forward = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Forward, MovementVector.Y);
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 
-		const FVector Right = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		AddMovementInput(Right, MovementVector.X);
-	}
+	const FVector Forward = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	AddMovementInput(Forward, MovementVector.Y);
+
+	const FVector Right = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	AddMovementInput(Right, MovementVector.X);
 }
 
 void APlayerCharacter::Look(const FInputActionValue& value)
 {
 	const FVector2D LookAxisValue = value.Get<FVector2D>();
 
-	
-
-	if (GetController())
-	{
-		AddControllerYawInput(LookAxisValue.X);
-		AddControllerPitchInput(LookAxisValue.Y);
-	}
+	AddControllerYawInput(LookAxisValue.X);
+	AddControllerPitchInput(LookAxisValue.Y);
 }
 
 void APlayerCharacter::EnterCrouch()

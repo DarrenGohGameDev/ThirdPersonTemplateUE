@@ -8,6 +8,8 @@
 #include "PlayerCharacter.generated.h"
 
 class UPlayerInputComponent;
+class USpringArmComponent;
+class UCameraComponent;
 
 /**
  * 
@@ -22,6 +24,12 @@ public :
 	APlayerCharacter();
 
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* ViewCamera;
 
 protected :
 
