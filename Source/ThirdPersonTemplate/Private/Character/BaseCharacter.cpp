@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BaseCharacter.h"
-#include "CharacterAttributeSet.h"
+#include "Character/BaseCharacter.h"
+#include "Character/CharacterAttributeSet.h"
 #include "AbilitySystemComponent.h"
 
 // Sets default values
