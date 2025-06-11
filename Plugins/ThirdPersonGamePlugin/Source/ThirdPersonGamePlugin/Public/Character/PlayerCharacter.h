@@ -13,7 +13,7 @@ class UPlayerInputComponent;
  * 
  */
 UCLASS()
-class THIRDPERSONTEMPLATE_API APlayerCharacter : public ABaseCharacter
+class THIRDPERSONGAMEPLUGIN_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 	

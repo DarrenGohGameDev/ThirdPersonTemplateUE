@@ -10,7 +10,7 @@ class UCharacterAttributeSet;
 class UAbilitySystemComponent;
 
 UCLASS()
-class THIRDPERSONTEMPLATE_API ABaseCharacter : public ACharacter
+class THIRDPERSONGAMEPLUGIN_API ABaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
 

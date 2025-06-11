@@ -9,7 +9,7 @@
 #include "CharacterAttributeSet.generated.h"
 
 UCLASS()
-class THIRDPERSONTEMPLATE_API UCharacterAttributeSet : public UAttributeSet
+class THIRDPERSONGAMEPLUGIN_API UCharacterAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 

@@ -12,7 +12,7 @@
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class THIRDPERSONTEMPLATE_API UPlayerInputComponent : public UActorComponent
+class THIRDPERSONGAMEPLUGIN_API UPlayerInputComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
