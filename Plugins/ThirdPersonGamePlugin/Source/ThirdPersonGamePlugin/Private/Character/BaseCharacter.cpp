@@ -4,6 +4,7 @@
 #include "Character/BaseCharacter.h"
 #include "Character/CharacterAttributeSet.h"
 #include "AbilitySystemComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -21,7 +22,7 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
+	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	
 }

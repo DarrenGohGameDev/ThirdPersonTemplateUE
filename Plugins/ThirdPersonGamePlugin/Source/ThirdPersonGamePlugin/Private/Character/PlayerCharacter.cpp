@@ -50,8 +50,6 @@ void APlayerCharacter::BeginPlay()
 
 void APlayerCharacter::Move(const FInputActionValue& value)
 {
-	
-
 	const FVector2D MovementVector = (value.Get<FVector2D>() * movementSpeedMultiplier) * actionSpeed;
 	UE_LOG(LogTemp, Warning, TEXT("move speed multi %f"), movementSpeedMultiplier);
 
@@ -87,21 +85,14 @@ void APlayerCharacter::FinishCrouch()
 	movementSpeedMultiplier = 1.0f;
 }
 
-void APlayerCharacter::Sprint(const FInputActionValue& value)
+void APlayerCharacter::EnterSprint()
 {
-	bool isSprinting = value.Get<bool>();
+	GetCharacterMovement()->MaxWalkSpeed = runSpeed * actionSpeed;
+}
 
-	if (isSprinting)
-	{
-		movementSpeedMultiplier = 3.5f;
-		UE_LOG(LogTemp, Warning, TEXT("sprint Pressed"));
-	}
-	else
-	{
-		movementSpeedMultiplier = 1.0f;
-		UE_LOG(LogTemp, Warning, TEXT("sprint Released"));
-	}
-	
+void APlayerCharacter::ExitSprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = walkSpeed * actionSpeed;
 }
 
 void APlayerCharacter::Interact()
@@ -124,7 +115,9 @@ void APlayerCharacter::InitPlayerCharacter()
 
 	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::CrouchInputAction, ETriggerEvent::Completed, this, &APlayerCharacter::FinishCrouch);
 
-	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::SprintInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Sprint);
+	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::SprintInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::EnterSprint);
+
+	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::SprintInputAction, ETriggerEvent::Completed, this, &APlayerCharacter::ExitSprint);
 
 	//playerInputComponent->SetupInputBinding(playerController, InputActionEnum::JumpInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Jump);
 

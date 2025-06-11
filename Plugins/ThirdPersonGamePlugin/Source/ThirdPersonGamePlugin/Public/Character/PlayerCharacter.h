@@ -50,7 +50,9 @@ protected :
 
 	void FinishCrouch();
 
-	void Sprint(const FInputActionValue& value);
+	void EnterSprint();
+
+	void ExitSprint();
 
 	void Interact();
 

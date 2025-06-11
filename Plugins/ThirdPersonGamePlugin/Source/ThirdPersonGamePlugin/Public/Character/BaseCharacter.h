@@ -31,11 +31,17 @@ protected:
 	UPROPERTY()
 	UAbilitySystemComponent* AbilitySystemComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Movement")
 	float actionSpeed = 1.0f;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Movement")
 	float  movementSpeedMultiplier = 1.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float runSpeed = 600.f;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float walkSpeed = 300.f;
 
 private:	
 	
