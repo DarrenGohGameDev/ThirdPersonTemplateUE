@@ -31,6 +31,8 @@ public class ThirdPersonGamePlugin : ModuleRules
                 "GameplayAbilities", 
 				"GameplayTags", 
 				"GameplayTasks",
+                "MotionTrajectory",
+                "PoseSearch", 
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

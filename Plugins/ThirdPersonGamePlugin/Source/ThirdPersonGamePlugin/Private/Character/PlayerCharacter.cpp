@@ -7,6 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Enums/InputActionEnums.h"
+#include "CharacterTrajectoryComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -20,6 +21,8 @@ APlayerCharacter::APlayerCharacter()
 	bUseControllerRotationYaw = true;
 
 	playerInputComponent = CreateDefaultSubobject<UPlayerInputComponent>(TEXT("PlayerInputComponent"));
+
+	TrajectoryComponent = CreateDefaultSubobject<UCharacterTrajectoryComponent>(TEXT("TrajectoryComponent"));
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(GetRootComponent());

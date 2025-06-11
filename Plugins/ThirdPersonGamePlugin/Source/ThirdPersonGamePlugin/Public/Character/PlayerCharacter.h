@@ -10,6 +10,7 @@
 class UPlayerInputComponent;
 class USpringArmComponent;
 class UCameraComponent;
+class UCharacterTrajectoryComponent;
 
 /**
  * 
@@ -37,6 +38,9 @@ protected :
 
 	UPROPERTY(EditAnywhere, Category = "InputComponent")
 	UPlayerInputComponent * playerInputComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UCharacterTrajectoryComponent* TrajectoryComponent;
 
 	void Move(const FInputActionValue& value);
 

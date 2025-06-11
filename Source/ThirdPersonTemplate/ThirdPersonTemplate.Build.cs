@@ -8,7 +8,7 @@ public class ThirdPersonTemplate : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" , "GameplayAbilities" , "GameplayTags", "GameplayTasks" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" , "GameplayAbilities" , "GameplayTags", "GameplayTasks","MotionTrajectory","PoseSearch",  });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
