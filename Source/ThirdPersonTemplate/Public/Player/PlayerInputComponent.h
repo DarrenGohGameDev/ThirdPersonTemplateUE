@@ -23,14 +23,25 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-protected:
+	template <typename UserClass>
+	void SetupInputBinding(APlayerController* playerController, InputActionEnum inputActionEnum, ETriggerEvent triggerEvent, UserClass* Object, void(UserClass::* Func)())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Move is being setup"));
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(playerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(playerInputMappingContext, 0);
+		}
 
-	// Called when the game starts
-	virtual void BeginPlay() override;
+		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(playerController->InputComponent))
+		{
+			EnhancedInputComponent->BindAction(GetInputActionFromInputActionEnum(inputActionEnum), triggerEvent, Object, Func);
+		}
+	};
 
 	template <typename UserClass>
-	void SetupInputBinding(APlayerController* playerController, InputActionEnum inputActionEnum, ETriggerEvent triggerEvent, UserClass* Object, typename FInputActionHandlerSignature::TMethodPtr<UserClass> Func)
+	void SetupInputBinding(APlayerController* playerController, InputActionEnum inputActionEnum, ETriggerEvent triggerEvent, UserClass* Object, void (UserClass::* Func)(const FInputActionValue&))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Move is being setup"));
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(playerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(playerInputMappingContext, 0);
@@ -46,27 +57,34 @@ protected:
 	{
 		switch (inputActionEnum)
 		{
-			case InputActionEnum::WalkInputAction:
-				return walkInputAction;
-				break;
+		case InputActionEnum::WalkInputAction:
+			return walkInputAction;
 
-			case InputActionEnum::AttackInputAction:
-				return attackInputAction;
-				break;
+		case InputActionEnum::AttackInputAction:
+			return attackInputAction;
 
-			case InputActionEnum::LookInputAction:
-				return lookInputAction;
-				break;
+		case InputActionEnum::LookInputAction:
+			return lookInputAction;
 
-			case InputActionEnum::InteractInputAction:
-				return interactInputAction;
-				break;
+		case InputActionEnum::InteractInputAction:
+			return interactInputAction;
 
-			default :
-				return nullptr;
-				break;
+		case InputActionEnum::CrouchInputAction:
+			return crouchInputAction;
+
+		case InputActionEnum::SprintInputAction:
+			return sprintInputAction;
+
+		default:
+			UE_LOG(LogTemp, Warning, TEXT("inputActionEnum %s inputActionEnum is not found please look into player input component"), *UEnum::GetValueAsString(inputActionEnum));
+			return nullptr;
 		}
 	};
+
+protected:
+
+	// Called when the game starts
+	virtual void BeginPlay() override;
 
 private:
 
@@ -75,6 +93,12 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* walkInputAction;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* crouchInputAction;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* sprintInputAction;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* attackInputAction;
