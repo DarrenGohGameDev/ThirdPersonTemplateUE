@@ -6,6 +6,8 @@
 #include "Character/BaseCharacter.h"
 #include "PlayerCharacter.generated.h"
 
+
+
 /**
  * 
  */
@@ -14,4 +16,12 @@ class THIRDPERSONTEMPLATE_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 	
+public :
+
+protected :
+
+	
+
+private :
+
 };
