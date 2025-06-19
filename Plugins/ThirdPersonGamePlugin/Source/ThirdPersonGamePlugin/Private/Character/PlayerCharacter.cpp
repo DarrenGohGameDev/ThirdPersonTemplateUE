@@ -7,6 +7,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Enums/InputActionEnums.h"
+#include "Item/PickableItemClass.h"
+#include "Components/BoxComponent.h"
 #include "CharacterTrajectoryComponent.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -23,6 +25,12 @@ APlayerCharacter::APlayerCharacter()
 	playerInputComponent = CreateDefaultSubobject<UPlayerInputComponent>(TEXT("PlayerInputComponent"));
 
 	TrajectoryComponent = CreateDefaultSubobject<UCharacterTrajectoryComponent>(TEXT("TrajectoryComponent"));
+
+	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
+	//RootComponent = CollisionBox;
+
+	CollisionBox->SetGenerateOverlapEvents(true);
+	CollisionBox->SetCollisionProfileName(TEXT("Trigger"));
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(GetRootComponent());
@@ -44,16 +52,11 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	InitPlayerCharacter();
-
-	
 }
 
 void APlayerCharacter::Move(const FInputActionValue& value)
 {
 	const FVector2D MovementVector = (value.Get<FVector2D>() * movementSpeedMultiplier) * actionSpeed;
-	UE_LOG(LogTemp, Warning, TEXT("move speed multi %f"), movementSpeedMultiplier);
-
-	//if (ActionState != EActionState::EAS_Unoccupied) return;
 
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -97,13 +100,58 @@ void APlayerCharacter::ExitSprint()
 
 void APlayerCharacter::Interact()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Interact is being pressed"));
+	
+	if (ItemsInPlayerRangeArray.IsValidIndex(0))
+	{
+		InteractWithItem(ItemsInPlayerRangeArray[0]);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Interact is being pressed"));
+	}
+	
 }
 
-//void APlayerCharacter::Jump()
-//{
-//	Super::Jump();
-//}
+bool APlayerCharacter::IsItemWithinPlayerFov(APickableItemClass* item)
+{
+	FVector playerForwardVector = this->GetActorForwardVector();
+	FVector toItem = (item->GetActorLocation() - this->GetActorLocation());
+
+	float dot = FVector::DotProduct(playerForwardVector, toItem);
+
+	if (dot >= playerFovRange)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Item is in front of player"));
+		ItemsInPlayerRangeArray.Add(item);
+		return true;
+	}
+
+	return false;
+}
+
+APickableItemClass* APlayerCharacter::RemoveItemFromPlayerRange(APickableItemClass* item)
+{
+	//ItemsInPlayerRangeArray.Remove(item);
+	return item;
+}
+
+void APlayerCharacter::InteractWithItem(APickableItemClass* item)
+{
+	// for now this is hard codded to work on pick up item
+	// need to expend and make this work with all item and being interactable
+	// writing for what will work for now 
+	item->Interact();
+	ItemsInPlayerRangeArray.Remove(item);
+	// prob wanna disable instead of destroy down the line for optamization
+	item->Destroy();
+}
+
+TArray<APickableItemClass*> APlayerCharacter::GetAllItemInPlayerFovInArray()
+{
+	TArray<APickableItemClass*> allItemInPlayerFov;
+
+	return allItemInPlayerFov;
+}
 
 void APlayerCharacter::InitPlayerCharacter()
 {
@@ -118,8 +166,6 @@ void APlayerCharacter::InitPlayerCharacter()
 	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::SprintInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::EnterSprint);
 
 	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::SprintInputAction, ETriggerEvent::Completed, this, &APlayerCharacter::ExitSprint);
-
-	//playerInputComponent->SetupInputBinding(playerController, InputActionEnum::JumpInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Jump);
 
 	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::LookInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 

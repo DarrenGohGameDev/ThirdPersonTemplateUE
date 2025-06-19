@@ -5,32 +5,38 @@
 #include "CoreMinimal.h"
 #include "Character/BaseCharacter.h"
 #include "InputActionValue.h"
+#include "Interface/PlayerInteractInterface.h"
 #include "PlayerCharacter.generated.h"
 
 class UPlayerInputComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UCharacterTrajectoryComponent;
+class UBoxComponent;
 
 /**
  * 
  */
 UCLASS()
-class THIRDPERSONGAMEPLUGIN_API APlayerCharacter : public ABaseCharacter
+class THIRDPERSONGAMEPLUGIN_API APlayerCharacter : public ABaseCharacter  , public IPlayerInteractInterface
 {
 	GENERATED_BODY()
 	
 public :
-
-	APlayerCharacter();
-
-	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArm;
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* ViewCamera;
+
+	APlayerCharacter();
+
+	virtual void Tick(float DeltaTime) override;
+
+	virtual bool IsItemWithinPlayerFov(APickableItemClass* item) override;
+
+	virtual APickableItemClass* RemoveItemFromPlayerRange(APickableItemClass* item) override;
 
 protected :
 
@@ -41,6 +47,12 @@ protected :
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UCharacterTrajectoryComponent* TrajectoryComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* CollisionBox;
+
+	UPROPERTY(EditAnywhere, Category = "InteractSystem")
+	float playerFovRange = 1.f;
 
 	void Move(const FInputActionValue& value);
 
@@ -56,7 +68,9 @@ protected :
 
 	void Interact();
 
-	//virtual void Jump() override;
+	virtual void InteractWithItem(APickableItemClass* item) override;
+
+	virtual TArray<APickableItemClass*>  GetAllItemInPlayerFovInArray() override;
 
 private :
 
