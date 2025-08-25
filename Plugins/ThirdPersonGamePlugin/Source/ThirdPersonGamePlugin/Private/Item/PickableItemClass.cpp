@@ -57,7 +57,7 @@ void APickableItemClass::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAc
 	IPlayerInteractInterface* playerPickUpInterface = Cast<IPlayerInteractInterface>(OtherActor);
 	if (playerPickUpInterface)
 	{
-		playerPickUpInterface->IsItemWithinPlayerFov(this);
+		playerPickUpInterface->IsInteractableWithinPlayerFov(this);
 	}
 }
 
@@ -66,6 +66,6 @@ void APickableItemClass::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActo
 	IPlayerInteractInterface* playerPickUpInterface = Cast<IPlayerInteractInterface>(OtherActor);
 	if (playerPickUpInterface)
 	{
-		playerPickUpInterface->RemoveItemFromPlayerRange(this);
+		playerPickUpInterface->RemoveInteractableFromPlayerRange(this);
 	}
 }

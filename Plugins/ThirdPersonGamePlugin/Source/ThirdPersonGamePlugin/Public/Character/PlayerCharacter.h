@@ -34,9 +34,9 @@ public :
 
 	virtual void Tick(float DeltaTime) override;
 
-	virtual bool IsItemWithinPlayerFov(AActor* item) override;
+	virtual bool IsInteractableWithinPlayerFov(AActor* item) override;
 
-	virtual AActor* RemoveItemFromPlayerRange(AActor* item) override;
+	virtual AActor* RemoveInteractableFromPlayerRange(AActor* item) override;
 
 protected :
 
@@ -70,7 +70,7 @@ protected :
 
 	virtual void InteractWithInteractable(IInteractable * item) override;
 
-	virtual TArray<APickableItemClass*>  GetAllItemInPlayerFovInArray() override;
+	virtual TArray<IInteractable*>  GetAllInteractableInPlayerFovInArray() override;
 
 private :
 

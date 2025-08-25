@@ -112,7 +112,7 @@ void APlayerCharacter::Interact()
 	
 }
 
-bool APlayerCharacter::IsItemWithinPlayerFov(AActor* item)
+bool APlayerCharacter::IsInteractableWithinPlayerFov(AActor* item)
 {
 	FVector playerForwardVector = this->GetActorForwardVector();
 	FVector toItem = (item->GetActorLocation() - this->GetActorLocation());
@@ -129,7 +129,7 @@ bool APlayerCharacter::IsItemWithinPlayerFov(AActor* item)
 	return false;
 }
 
-AActor* APlayerCharacter::RemoveItemFromPlayerRange(AActor* item)
+AActor* APlayerCharacter::RemoveInteractableFromPlayerRange(AActor* item)
 {
 	return item;
 }
@@ -146,11 +146,11 @@ void APlayerCharacter::InteractWithInteractable(IInteractable * item)
 	//item->Destroy();
 }
 
-TArray<APickableItemClass*> APlayerCharacter::GetAllItemInPlayerFovInArray()
+TArray<IInteractable*> APlayerCharacter::GetAllInteractableInPlayerFovInArray()
 {
-	TArray<APickableItemClass*> allItemInPlayerFov;
+	TArray<IInteractable*> allInteractableInPlayerFov;
 
-	return allItemInPlayerFov;
+	return allInteractableInPlayerFov;
 }
 
 void APlayerCharacter::InitPlayerCharacter()

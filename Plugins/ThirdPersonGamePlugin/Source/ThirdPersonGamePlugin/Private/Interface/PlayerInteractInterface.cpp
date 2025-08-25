@@ -6,12 +6,12 @@
 
 // Add default functionality here for any IPlayerInteractInterface functions that are not pure virtual.
 
-bool IPlayerInteractInterface::IsItemWithinPlayerFov(AActor* item)
+bool IPlayerInteractInterface::IsInteractableWithinPlayerFov(AActor* item)
 {
 	return false;
 }
 
-AActor* IPlayerInteractInterface::RemoveItemFromPlayerRange(AActor* item)
+AActor* IPlayerInteractInterface::RemoveInteractableFromPlayerRange(AActor* item)
 {
 	return nullptr;
 }
@@ -21,7 +21,7 @@ void IPlayerInteractInterface::InteractWithInteractable(IInteractable* item)
 
 }
 
-TArray<APickableItemClass*> IPlayerInteractInterface::GetAllItemInPlayerFovInArray()
+TArray<IInteractable*> IPlayerInteractInterface::GetAllInteractableInPlayerFovInArray()
 {
-	return TArray<APickableItemClass*>();
+	return TArray<IInteractable*>();
 }
