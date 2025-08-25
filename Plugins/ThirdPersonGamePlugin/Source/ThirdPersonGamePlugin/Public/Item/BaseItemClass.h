@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interface/Interactable.h"
 #include "BaseItemClass.generated.h"
 
 class UItemAttributeSet;
 class UAbilitySystemComponent;
 
 UCLASS()
-class THIRDPERSONGAMEPLUGIN_API ABaseItemClass : public AActor
+class THIRDPERSONGAMEPLUGIN_API ABaseItemClass : public AActor , public IInteractable
 {
 	GENERATED_BODY()
 	
@@ -21,7 +22,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void Interact();
+	virtual void Interact() override;
 
 	virtual void UseItem();
 
