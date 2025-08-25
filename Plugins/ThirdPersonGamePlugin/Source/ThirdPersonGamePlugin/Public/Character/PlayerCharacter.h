@@ -68,7 +68,7 @@ protected :
 
 	void Interact();
 
-	virtual void InteractWithItem(APickableItemClass* item) override;
+	virtual void InteractWithInteractable(IInteractable * item) override;
 
 	virtual TArray<APickableItemClass*>  GetAllItemInPlayerFovInArray() override;
 

@@ -16,7 +16,7 @@ AActor* IPlayerInteractInterface::RemoveItemFromPlayerRange(AActor* item)
 	return nullptr;
 }
 
-void IPlayerInteractInterface::InteractWithItem(APickableItemClass* item)
+void IPlayerInteractInterface::InteractWithInteractable(IInteractable* item)
 {
 
 }

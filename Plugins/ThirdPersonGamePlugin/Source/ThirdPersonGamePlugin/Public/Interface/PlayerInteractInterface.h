@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "Interface/Interactable.h"
 #include "PlayerInteractInterface.generated.h"
 
 class APickableItemClass;
@@ -30,9 +31,8 @@ public:
 	virtual AActor* RemoveItemFromPlayerRange(AActor* item);
 
 protected:
-
 	
-	virtual void InteractWithItem(APickableItemClass* item);
+	virtual void InteractWithInteractable(IInteractable* item);
 
 	virtual TArray<APickableItemClass*> GetAllItemInPlayerFovInArray();
 	

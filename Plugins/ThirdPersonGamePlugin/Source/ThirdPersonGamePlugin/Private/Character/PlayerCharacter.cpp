@@ -103,7 +103,7 @@ void APlayerCharacter::Interact()
 	
 	if (InteractableInPlayerRangeArray.IsValidIndex(0))
 	{
-		//InteractWithItem(InteractableInPlayerRangeArray[0]);
+		InteractWithInteractable(Cast<IInteractable>(InteractableInPlayerRangeArray[0]));
 	}
 	else
 	{
@@ -134,15 +134,16 @@ AActor* APlayerCharacter::RemoveItemFromPlayerRange(AActor* item)
 	return item;
 }
 
-void APlayerCharacter::InteractWithItem(APickableItemClass* item)
+void APlayerCharacter::InteractWithInteractable(IInteractable * item)
 {
 	// for now this is hard codded to work on pick up item
 	// need to expend and make this work with all item and being interactable
 	// writing for what will work for now 
 	item->Interact();
-	InteractableInPlayerRangeArray.Remove(item);
-	// prob wanna disable instead of destroy down the line for optamization
-	item->Destroy();
+	// commiting remove intreactable function out need a way to remove intreactable that is one use on the base item itself
+	//InteractableInPlayerRangeArray.Remove(item);
+	//// prob wanna disable instead of destroy down the line for optamization
+	//item->Destroy();
 }
 
 TArray<APickableItemClass*> APlayerCharacter::GetAllItemInPlayerFovInArray()
