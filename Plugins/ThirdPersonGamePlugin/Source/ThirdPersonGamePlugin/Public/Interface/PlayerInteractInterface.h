@@ -25,7 +25,7 @@ class THIRDPERSONGAMEPLUGIN_API IPlayerInteractInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
-	virtual bool IsItemWithinPlayerFov(APickableItemClass* item);
+	virtual bool IsItemWithinPlayerFov(AActor* item);
 
 	virtual APickableItemClass * RemoveItemFromPlayerRange(APickableItemClass* item);
 
@@ -38,7 +38,7 @@ protected:
 	
 	float playerFovRange = 1.f;
 
-	TArray<APickableItemClass*> ItemsInPlayerRangeArray;
+	TArray<AActor*> InteractableInPlayerRangeArray;
 
 private:
 

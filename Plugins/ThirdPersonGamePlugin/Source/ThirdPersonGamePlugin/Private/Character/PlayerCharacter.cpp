@@ -101,9 +101,9 @@ void APlayerCharacter::ExitSprint()
 void APlayerCharacter::Interact()
 {
 	
-	if (ItemsInPlayerRangeArray.IsValidIndex(0))
+	if (InteractableInPlayerRangeArray.IsValidIndex(0))
 	{
-		InteractWithItem(ItemsInPlayerRangeArray[0]);
+		//InteractWithItem(InteractableInPlayerRangeArray[0]);
 	}
 	else
 	{
@@ -112,7 +112,7 @@ void APlayerCharacter::Interact()
 	
 }
 
-bool APlayerCharacter::IsItemWithinPlayerFov(APickableItemClass* item)
+bool APlayerCharacter::IsItemWithinPlayerFov(AActor* item)
 {
 	FVector playerForwardVector = this->GetActorForwardVector();
 	FVector toItem = (item->GetActorLocation() - this->GetActorLocation());
@@ -122,7 +122,7 @@ bool APlayerCharacter::IsItemWithinPlayerFov(APickableItemClass* item)
 	if (dot >= playerFovRange)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Item is in front of player"));
-		ItemsInPlayerRangeArray.Add(item);
+		InteractableInPlayerRangeArray.Add(item);
 		return true;
 	}
 
@@ -141,7 +141,7 @@ void APlayerCharacter::InteractWithItem(APickableItemClass* item)
 	// need to expend and make this work with all item and being interactable
 	// writing for what will work for now 
 	item->Interact();
-	ItemsInPlayerRangeArray.Remove(item);
+	InteractableInPlayerRangeArray.Remove(item);
 	// prob wanna disable instead of destroy down the line for optamization
 	item->Destroy();
 }

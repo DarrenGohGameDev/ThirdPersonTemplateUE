@@ -6,7 +6,7 @@
 
 // Add default functionality here for any IPlayerInteractInterface functions that are not pure virtual.
 
-bool IPlayerInteractInterface::IsItemWithinPlayerFov(APickableItemClass* item)
+bool IPlayerInteractInterface::IsItemWithinPlayerFov(AActor* item)
 {
 	return false;
 }

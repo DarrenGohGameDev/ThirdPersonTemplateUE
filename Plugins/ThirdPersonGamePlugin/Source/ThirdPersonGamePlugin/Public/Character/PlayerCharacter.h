@@ -34,7 +34,7 @@ public :
 
 	virtual void Tick(float DeltaTime) override;
 
-	virtual bool IsItemWithinPlayerFov(APickableItemClass* item) override;
+	virtual bool IsItemWithinPlayerFov(AActor* item) override;
 
 	virtual APickableItemClass* RemoveItemFromPlayerRange(APickableItemClass* item) override;
 
