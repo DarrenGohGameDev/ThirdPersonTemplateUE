@@ -7,6 +7,7 @@
 #include "PickableItemClass.generated.h"
 
 class USphereComponent;
+class IPlayerInteractInterface;
 
 /**
  * 
@@ -31,19 +32,21 @@ protected :
 	float detectionRange = 100.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemFloatingParameter")
-	float M_Amplitude = 0.25f;
+	float itemFloatingAmplitude = 0.25f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemFloatingParameter")
-	float M_TimeConstant = 5.f;
+	float itemFloatingTimeConstant = 5.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemFloatingParameter")
-	float M_RotationRate = 5.f;
+	float itemFloatingRotationRate = 5.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemFloatingParameter")
-	float M_RunningTimeFloat;
+	float itemFloatingRunningTimeFloat;
 
 	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* ItemMesh;
+	UStaticMeshComponent* itemMesh;
+
+	IPlayerInteractInterface* playerPickUpInterface;
 
 	virtual void BeginPlay() override;
 
@@ -70,6 +73,8 @@ protected :
 		UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex
 	);
+
+	void ItemPickedUp();
 
 private :
 

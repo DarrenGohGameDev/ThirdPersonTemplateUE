@@ -7,10 +7,10 @@
 
 APickableItemClass::APickableItemClass()
 {
-	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMeshComponent"));
-	ItemMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-	ItemMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	RootComponent = ItemMesh;
+	itemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMeshComponent"));
+	itemMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	itemMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	RootComponent = itemMesh;
 
 	detectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("DetectionSphere"));
 	detectionSphere->SetSphereRadius(detectionRange);
@@ -31,20 +31,21 @@ void APickableItemClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	M_RunningTimeFloat += DeltaTime;
+	itemFloatingRunningTimeFloat += DeltaTime;
 
 	AddActorWorldOffset(FVector(0.f, 0.f, TransformSin()));
-	AddActorWorldRotation(M_Amplitude * FRotator(M_RotationRate * DeltaTime));
+	AddActorWorldRotation(itemFloatingAmplitude * FRotator(itemFloatingRotationRate * DeltaTime));
 }
 
 float APickableItemClass::TransformSin()
 {
-	return M_Amplitude * FMath::Sin(M_RunningTimeFloat * M_TimeConstant);
+	return itemFloatingAmplitude * FMath::Sin(itemFloatingRunningTimeFloat * itemFloatingTimeConstant);
 }
 
 void APickableItemClass::Interact()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Item is being Picked up"));
+	ItemPickedUp();
 }
 
 void APickableItemClass::OverlapWithPlayer()
@@ -54,7 +55,7 @@ void APickableItemClass::OverlapWithPlayer()
 
 void APickableItemClass::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	IPlayerInteractInterface* playerPickUpInterface = Cast<IPlayerInteractInterface>(OtherActor);
+	playerPickUpInterface = Cast<IPlayerInteractInterface>(OtherActor);
 	if (playerPickUpInterface)
 	{
 		playerPickUpInterface->IsInteractableWithinPlayerFov(this);
@@ -63,9 +64,16 @@ void APickableItemClass::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAc
 
 void APickableItemClass::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	IPlayerInteractInterface* playerPickUpInterface = Cast<IPlayerInteractInterface>(OtherActor);
+	playerPickUpInterface = Cast<IPlayerInteractInterface>(OtherActor);
 	if (playerPickUpInterface)
 	{
 		playerPickUpInterface->RemoveInteractableFromPlayerRange(this);
+		playerPickUpInterface = nullptr;
 	}
+}
+
+void APickableItemClass::ItemPickedUp()
+{
+	playerPickUpInterface->RemoveInteractableFromPlayerRange(this);
+	this->Destroy();
 }
