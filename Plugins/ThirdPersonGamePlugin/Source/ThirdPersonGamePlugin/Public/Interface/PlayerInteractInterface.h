@@ -27,7 +27,7 @@ public:
 
 	virtual bool IsItemWithinPlayerFov(AActor* item);
 
-	virtual APickableItemClass * RemoveItemFromPlayerRange(APickableItemClass* item);
+	virtual AActor* RemoveItemFromPlayerRange(AActor* item);
 
 protected:
 

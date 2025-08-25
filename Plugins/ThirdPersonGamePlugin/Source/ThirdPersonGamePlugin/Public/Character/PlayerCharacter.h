@@ -36,7 +36,7 @@ public :
 
 	virtual bool IsItemWithinPlayerFov(AActor* item) override;
 
-	virtual APickableItemClass* RemoveItemFromPlayerRange(APickableItemClass* item) override;
+	virtual AActor* RemoveItemFromPlayerRange(AActor* item) override;
 
 protected :
 

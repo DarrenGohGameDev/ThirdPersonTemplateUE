@@ -129,9 +129,8 @@ bool APlayerCharacter::IsItemWithinPlayerFov(AActor* item)
 	return false;
 }
 
-APickableItemClass* APlayerCharacter::RemoveItemFromPlayerRange(APickableItemClass* item)
+AActor* APlayerCharacter::RemoveItemFromPlayerRange(AActor* item)
 {
-	//ItemsInPlayerRangeArray.Remove(item);
 	return item;
 }
 

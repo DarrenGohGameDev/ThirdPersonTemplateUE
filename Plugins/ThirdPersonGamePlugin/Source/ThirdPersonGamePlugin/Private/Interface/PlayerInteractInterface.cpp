@@ -11,7 +11,7 @@ bool IPlayerInteractInterface::IsItemWithinPlayerFov(AActor* item)
 	return false;
 }
 
-APickableItemClass* IPlayerInteractInterface::RemoveItemFromPlayerRange(APickableItemClass* item)
+AActor* IPlayerInteractInterface::RemoveItemFromPlayerRange(AActor* item)
 {
 	return nullptr;
 }
