@@ -2,6 +2,8 @@
 
 
 #include "UI/Chatbox/ChatboxConversation.h"
+#include "UI/Chatbox/ChatboxManager.h"
+#include "UI/Chatbox/ChatboxData.h"
 
 // Sets default values for this component's properties
 UChatboxConversation::UChatboxConversation()
@@ -13,22 +15,7 @@ UChatboxConversation::UChatboxConversation()
 	// ...
 }
 
-
-// Called when the game starts
-void UChatboxConversation::BeginPlay()
+TArray<FChatboxData> UChatboxConversation::GetConversationArray()
 {
-	Super::BeginPlay();
-
-	// ...
-	
+	return conversationArray;
 }
-
-
-// Called every frame
-void UChatboxConversation::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-

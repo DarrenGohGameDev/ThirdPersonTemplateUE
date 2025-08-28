@@ -8,7 +8,7 @@
 
 class USphereComponent;
 class IPlayerInteractInterface;
-
+class UWorldObjectInteractableDetectionComponent;
 /**
  * 
  */
@@ -23,13 +23,12 @@ public :
 
 	virtual void Interact() override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "InteractDetection")
+	UWorldObjectInteractableDetectionComponent* interactableDetectionComponent;
+
 protected :
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Detection")
-	USphereComponent* detectionSphere;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Detection")
-	float detectionRange = 100.f;
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemFloatingParameter")
 	float itemFloatingAmplitude = 0.25f;
@@ -55,24 +54,6 @@ protected :
 	float TransformSin();
 
 	void OverlapWithPlayer();
-
-	UFUNCTION()
-	void OnOverlapBegin(
-		UPrimitiveComponent* OverlappedComp,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex,
-		bool bFromSweep,
-		const FHitResult& SweepResult
-	);
-
-	UFUNCTION()
-	void OnOverlapEnd(
-		UPrimitiveComponent* OverlappedComp,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex
-	);
 
 	void ItemPickedUp();
 

@@ -3,6 +3,7 @@
 
 #include "UI/Chatbox/ChatboxManager.h"
 
+FOnStartConversation UChatboxManager::onStartConversation;
 // Sets default values for this component's properties
 UChatboxManager::UChatboxManager()
 {

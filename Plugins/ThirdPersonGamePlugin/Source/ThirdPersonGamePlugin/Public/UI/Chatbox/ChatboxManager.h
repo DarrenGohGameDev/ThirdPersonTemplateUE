@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Delegates/Delegate.h"
+#include "UI/Chatbox/ChatboxData.h"
 #include "ChatboxManager.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnStartConversation,TArray<FChatboxData>);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THIRDPERSONGAMEPLUGIN_API UChatboxManager : public UActorComponent
@@ -13,16 +16,14 @@ class THIRDPERSONGAMEPLUGIN_API UChatboxManager : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UChatboxManager();
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	static FOnStartConversation onStartConversation;
+
+protected:
+
+	virtual void BeginPlay() override;
+
 };

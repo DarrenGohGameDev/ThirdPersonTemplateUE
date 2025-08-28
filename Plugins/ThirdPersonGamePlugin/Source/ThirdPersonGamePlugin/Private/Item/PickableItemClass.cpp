@@ -4,6 +4,7 @@
 #include "Item/PickableItemClass.h"
 #include "Components/SphereComponent.h"
 #include "Interface/PlayerInteractInterface.h"
+#include "Components/WorldObjectInteractableDetectionComponent.h"
 
 APickableItemClass::APickableItemClass()
 {
@@ -12,19 +13,12 @@ APickableItemClass::APickableItemClass()
 	itemMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	RootComponent = itemMesh;
 
-	detectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("DetectionSphere"));
-	detectionSphere->SetSphereRadius(detectionRange);
-	detectionSphere->SetupAttachment(RootComponent);
+	interactableDetectionComponent = CreateDefaultSubobject<UWorldObjectInteractableDetectionComponent>(TEXT("InteractableDetectionComponent"));
 }
 
 void APickableItemClass::BeginPlay()
 {
 	Super::BeginPlay();
-
-	detectionSphere->SetSphereRadius(detectionRange);
-
-	detectionSphere->OnComponentBeginOverlap.AddDynamic(this, &APickableItemClass::OnOverlapBegin);
-	detectionSphere->OnComponentEndOverlap.AddDynamic(this, &APickableItemClass::OnOverlapEnd);
 }
 
 void APickableItemClass::Tick(float DeltaTime)
@@ -51,25 +45,6 @@ void APickableItemClass::Interact()
 void APickableItemClass::OverlapWithPlayer()
 {
 
-}
-
-void APickableItemClass::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	playerPickUpInterface = Cast<IPlayerInteractInterface>(OtherActor);
-	if (playerPickUpInterface)
-	{
-		playerPickUpInterface->IsInteractableWithinPlayerFov(this);
-	}
-}
-
-void APickableItemClass::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	playerPickUpInterface = Cast<IPlayerInteractInterface>(OtherActor);
-	if (playerPickUpInterface)
-	{
-		playerPickUpInterface->RemoveInteractableFromPlayerRange(this);
-		playerPickUpInterface = nullptr;
-	}
 }
 
 void APickableItemClass::ItemPickedUp()
