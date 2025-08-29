@@ -17,18 +17,18 @@ class THIRDPERSONGAMEPLUGIN_API UWorldObjectInteractableDetectionComponent : pub
 public:	
 	// Sets default values for this component's properties
 	UWorldObjectInteractableDetectionComponent();
-
+	// REMINDER NEED TO SET interactDetectionSphere root component
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "InteractDetection")
 	USphereComponent* interactDetectionSphere;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "InteractDetection")
 	float interactDetectionRange = 100.f;
 
+	IPlayerInteractInterface* playerPickUpInterface;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	IPlayerInteractInterface* playerPickUpInterface;
 
 	UFUNCTION()
 	void OnOverlapBegin(

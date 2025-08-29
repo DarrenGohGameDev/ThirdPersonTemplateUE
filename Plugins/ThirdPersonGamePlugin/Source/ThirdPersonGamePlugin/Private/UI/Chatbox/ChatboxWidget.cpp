@@ -2,7 +2,6 @@
 
 
 #include "UI/Chatbox/ChatboxWidget.h"
-#include "Components/VerticalBox.h"
 #include "Components/EditableTextBox.h"
 #include "UI/Chatbox/ChatboxData.h"
 #include "Kismet/GameplayStatics.h"
@@ -16,40 +15,53 @@ UChatboxWidget::UChatboxWidget(const FObjectInitializer& ObjectInitializer) : Su
 void UChatboxWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+
 	UChatboxManager::onStartConversation.AddUObject(this, &UChatboxWidget::StartChatting);
+	UChatboxManager::onLeaveConversation.AddUObject(this, &UChatboxWidget::StopChatting);
+	UChatboxManager::onNextChat.AddUObject(this, &UChatboxWidget::NextChat);
+
+	StopChatting();
 }
 
 void UChatboxWidget::NativeDestruct()
 {
 	Super::NativeDestruct();
+
 	UChatboxManager::onStartConversation.RemoveAll(this);
+	UChatboxManager::onLeaveConversation.RemoveAll(this);
+	UChatboxManager::onNextChat.RemoveAll(this);
 }
 
 void UChatboxWidget::StartChatting(TArray<FChatboxData> chatboxData)
 {
 	ToggleChatbox(true);
 	currentConversationArray = chatboxData;
+	ResetChatbox();
+	NextChat();
 }
 
 void UChatboxWidget::StopChatting()
 {
 	ToggleChatbox(false);
-	currentConversationCounter = 0;
+	ResetChatbox();
 }
 
 void UChatboxWidget::NextChat()
 {
-	if (currentConversationCounter < currentConversationArray.Num())
-	{
-		currentConversationCounter++;
-		FString speakerName = currentConversationArray[currentConversationCounter].speakerName;
-		FString msg = currentConversationArray[currentConversationCounter].message;
-		SetChatboxText(speakerName, msg);
-	}
-	else if (currentConversationCounter >= currentConversationArray.Num())
+	if (this->GetVisibility() != ESlateVisibility::Visible)
+		return;
+	currentLetterIndex = 0;
+
+	if (currentConversationCounter >= currentConversationArray.Num())
 	{
 		StopChatting();
+		return;
 	}
+
+	FString speakerName = currentConversationArray[currentConversationCounter].speakerName;
+	FString msg = currentConversationArray[currentConversationCounter].message;
+	SetChatboxText(speakerName, msg);
+	currentConversationCounter++;
 }
 
 void UChatboxWidget::SetChatboxText(FString tittle, FString msg)
@@ -60,7 +72,7 @@ void UChatboxWidget::SetChatboxText(FString tittle, FString msg)
 
 void UChatboxWidget::ToggleChatbox(bool toggle)
 {
-    chatbox->SetVisibility(toggle ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+    this->SetVisibility(toggle ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 }
 
 void UChatboxWidget::StartTypeWriterEffectOnChatboxText(FString msg)
@@ -83,7 +95,7 @@ void UChatboxWidget::ShowNextLetter()
 		currentTypeWriterEffectText.Append(typeWriterEffectLetterArray[currentLetterIndex]);
 		chatboxMessageText->SetText(FText::FromString(currentTypeWriterEffectText));
 		currentLetterIndex++;
-		UGameplayStatics::PlaySound2D(this, typeWritterEffectSfx);
+		UGameplayStatics::PlaySound2D(this, typeWritterEffectSfx, typeWriterEffectSfxVolume);
 	}
 	else
 	{
@@ -94,4 +106,11 @@ void UChatboxWidget::ShowNextLetter()
 void UChatboxWidget::StopTypeWriterEffect()
 {
 	GetWorld()->GetTimerManager().ClearTimer(typeWriterEffectTimer);
+}
+
+void UChatboxWidget::ResetChatbox()
+{
+	currentConversationCounter = 0;
+	chatboxTittleText->SetText(FText::GetEmpty());
+	chatboxMessageText->SetText(FText::GetEmpty());
 }

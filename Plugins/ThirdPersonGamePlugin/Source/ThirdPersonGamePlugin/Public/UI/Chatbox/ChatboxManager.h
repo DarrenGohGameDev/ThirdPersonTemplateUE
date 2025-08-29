@@ -10,6 +10,10 @@
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnStartConversation,TArray<FChatboxData>);
 
+DECLARE_MULTICAST_DELEGATE(FOnLeaveConversation);
+
+DECLARE_MULTICAST_DELEGATE(FOnNextChat);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THIRDPERSONGAMEPLUGIN_API UChatboxManager : public UActorComponent
 {
@@ -21,6 +25,10 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	static FOnStartConversation onStartConversation;
+
+	static FOnLeaveConversation onLeaveConversation;
+
+	static FOnNextChat onNextChat;
 
 protected:
 

@@ -4,6 +4,9 @@
 #include "UI/Chatbox/ChatboxManager.h"
 
 FOnStartConversation UChatboxManager::onStartConversation;
+FOnLeaveConversation UChatboxManager::onLeaveConversation;
+FOnNextChat UChatboxManager::onNextChat;
+
 // Sets default values for this component's properties
 UChatboxManager::UChatboxManager()
 {

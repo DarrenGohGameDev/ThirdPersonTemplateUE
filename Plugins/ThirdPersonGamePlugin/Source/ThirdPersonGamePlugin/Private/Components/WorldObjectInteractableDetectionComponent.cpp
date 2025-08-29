@@ -11,8 +11,6 @@ UWorldObjectInteractableDetectionComponent::UWorldObjectInteractableDetectionCom
 	PrimaryComponentTick.bCanEverTick = true;
 
 	interactDetectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("InteractDetectionSphere"));
-	interactDetectionSphere->SetSphereRadius(interactDetectionRange);
-	interactDetectionSphere->SetupAttachment(this);
 }
 
 
@@ -30,18 +28,22 @@ void UWorldObjectInteractableDetectionComponent::BeginPlay()
 
 void UWorldObjectInteractableDetectionComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	UE_LOG(LogTemp, Warning, TEXT("being overlapped"));
 	playerPickUpInterface = Cast<IPlayerInteractInterface>(OtherActor);
 	if (playerPickUpInterface)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("being overlapped by player"));
 		playerPickUpInterface->IsInteractableWithinPlayerFov(this->GetOwner());
 	}
 }
 
 void UWorldObjectInteractableDetectionComponent::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	UE_LOG(LogTemp, Warning, TEXT("exit being overlapped"));
 	playerPickUpInterface = Cast<IPlayerInteractInterface>(OtherActor);
 	if (playerPickUpInterface)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("exit being overlapped by player"));
 		playerPickUpInterface->RemoveInteractableFromPlayerRange(this->GetOwner());
 		playerPickUpInterface = nullptr;
 	}

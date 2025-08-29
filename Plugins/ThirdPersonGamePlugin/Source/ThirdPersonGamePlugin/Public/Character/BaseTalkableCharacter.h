@@ -29,4 +29,14 @@ protected :
 	UWorldObjectInteractableDetectionComponent* interactableDetectionComponent;
 
 	virtual void Interact() override;
+
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void OnOverlapEnd(
+		UPrimitiveComponent* OverlappedComp,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex
+	);
 };

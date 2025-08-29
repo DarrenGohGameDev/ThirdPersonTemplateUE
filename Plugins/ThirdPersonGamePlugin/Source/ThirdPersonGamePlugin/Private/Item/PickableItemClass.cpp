@@ -14,6 +14,9 @@ APickableItemClass::APickableItemClass()
 	RootComponent = itemMesh;
 
 	interactableDetectionComponent = CreateDefaultSubobject<UWorldObjectInteractableDetectionComponent>(TEXT("InteractableDetectionComponent"));
+	interactableDetectionComponent->SetupAttachment(RootComponent);
+
+	interactableDetectionComponent->interactDetectionSphere->SetupAttachment(RootComponent);
 }
 
 void APickableItemClass::BeginPlay()
@@ -49,6 +52,6 @@ void APickableItemClass::OverlapWithPlayer()
 
 void APickableItemClass::ItemPickedUp()
 {
-	playerPickUpInterface->RemoveInteractableFromPlayerRange(this);
+	interactableDetectionComponent->playerPickUpInterface->RemoveInteractableFromPlayerRange(this);
 	this->Destroy();
 }

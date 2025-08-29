@@ -13,6 +13,7 @@
 class UEditableTextBox;
 class UVerticalBox;
 class USoundBase;
+class UButton;
 struct FChatboxData;
 
 UCLASS()
@@ -26,17 +27,17 @@ public :
 
 protected :
 
-	UPROPERTY(EditAnywhere);
-	UVerticalBox* chatbox;
-
-	UPROPERTY(EditAnywhere);
+	UPROPERTY(meta = (BindWidget));
 	UEditableTextBox* chatboxMessageText;
 
-	UPROPERTY(EditAnywhere);
+	UPROPERTY(meta = (BindWidget));
 	UEditableTextBox* chatboxTittleText;
 
 	UPROPERTY(EditAnywhere)
 	float typeWriterEffectSpeed = 0.05f;
+
+	UPROPERTY(EditAnywhere)
+	float typeWriterEffectSfxVolume = 1.0f;
 
 	UPROPERTY(EditAnywhere)
 	USoundBase * typeWritterEffectSfx;
@@ -74,4 +75,6 @@ private :
 	void ShowNextLetter();
 
 	void StopTypeWriterEffect();
+
+	void ResetChatbox();
 };

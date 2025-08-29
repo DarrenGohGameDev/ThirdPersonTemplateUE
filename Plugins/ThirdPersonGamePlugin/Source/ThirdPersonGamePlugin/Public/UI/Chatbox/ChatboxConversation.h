@@ -23,4 +23,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Converesation")
 	TArray<FChatboxData> conversationArray;
+
+	
 };

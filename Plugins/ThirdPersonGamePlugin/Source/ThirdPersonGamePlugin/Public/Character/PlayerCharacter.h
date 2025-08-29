@@ -13,7 +13,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UCharacterTrajectoryComponent;
 class UBoxComponent;
-
+class UChatboxWidget;
 /**
  * 
  */
@@ -51,6 +51,11 @@ protected :
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* CollisionBox;
 
+	UPROPERTY(EditAnywhere, Category="HUD")
+	TSubclassOf<UChatboxWidget> chatboxWidgetClass;
+
+	UChatboxWidget* playerChatboxWidget;
+
 	UPROPERTY(EditAnywhere, Category = "InteractSystem")
 	float playerFovRange = 1.f;
 
@@ -67,6 +72,8 @@ protected :
 	void ExitSprint();
 
 	void Interact();
+
+	void NextChat();
 
 	virtual void InteractWithInteractable(IInteractable * item) override;
 

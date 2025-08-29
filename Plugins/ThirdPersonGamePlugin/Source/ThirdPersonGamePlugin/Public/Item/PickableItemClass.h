@@ -45,8 +45,6 @@ protected :
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* itemMesh;
 
-	IPlayerInteractInterface* playerPickUpInterface;
-
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;

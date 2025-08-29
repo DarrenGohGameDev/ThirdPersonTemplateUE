@@ -10,6 +10,9 @@
 #include "Item/PickableItemClass.h"
 #include "Components/BoxComponent.h"
 #include "CharacterTrajectoryComponent.h"
+#include "Blueprint/UserWidget.h"
+#include "UI/Chatbox/ChatboxWidget.h"
+#include "UI/Chatbox/ChatboxManager.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -39,6 +42,8 @@ APlayerCharacter::APlayerCharacter()
 
 	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ViewCamera"));
 	ViewCamera->SetupAttachment(SpringArm);
+
+	
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -112,6 +117,11 @@ void APlayerCharacter::Interact()
 	
 }
 
+void APlayerCharacter::NextChat()
+{
+	UChatboxManager::onNextChat.Broadcast();
+}
+
 bool APlayerCharacter::IsInteractableWithinPlayerFov(AActor* item)
 {
 	FVector playerForwardVector = this->GetActorForwardVector();
@@ -131,6 +141,7 @@ bool APlayerCharacter::IsInteractableWithinPlayerFov(AActor* item)
 
 AActor* APlayerCharacter::RemoveInteractableFromPlayerRange(AActor* item)
 {
+	InteractableInPlayerRangeArray.Remove(item);
 	return item;
 }
 
@@ -170,6 +181,12 @@ void APlayerCharacter::InitPlayerCharacter()
 	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::LookInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 
 	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::InteractInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Interact);
+
+	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::AttackInputAction, ETriggerEvent::Started, this, &APlayerCharacter::NextChat);
+
+	playerChatboxWidget = CreateWidget<UChatboxWidget>(playerController, chatboxWidgetClass);
+
+	playerChatboxWidget->AddToViewport();
 }
 
 
