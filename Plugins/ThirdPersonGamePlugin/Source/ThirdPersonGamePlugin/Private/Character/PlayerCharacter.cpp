@@ -7,7 +7,12 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Enums/InputActionEnums.h"
+#include "Item/PickableItemClass.h"
+#include "Components/BoxComponent.h"
 #include "CharacterTrajectoryComponent.h"
+#include "Blueprint/UserWidget.h"
+#include "UI/Chatbox/ChatboxWidget.h"
+#include "UI/Chatbox/ChatboxManager.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -24,6 +29,12 @@ APlayerCharacter::APlayerCharacter()
 
 	TrajectoryComponent = CreateDefaultSubobject<UCharacterTrajectoryComponent>(TEXT("TrajectoryComponent"));
 
+	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
+	//RootComponent = CollisionBox;
+
+	CollisionBox->SetGenerateOverlapEvents(true);
+	CollisionBox->SetCollisionProfileName(TEXT("Trigger"));
+
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(GetRootComponent());
 	SpringArm->TargetArmLength = 300.f;
@@ -31,6 +42,8 @@ APlayerCharacter::APlayerCharacter()
 
 	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ViewCamera"));
 	ViewCamera->SetupAttachment(SpringArm);
+
+	
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -44,16 +57,11 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	InitPlayerCharacter();
-
-	
 }
 
 void APlayerCharacter::Move(const FInputActionValue& value)
 {
 	const FVector2D MovementVector = (value.Get<FVector2D>() * movementSpeedMultiplier) * actionSpeed;
-	UE_LOG(LogTemp, Warning, TEXT("move speed multi %f"), movementSpeedMultiplier);
-
-	//if (ActionState != EActionState::EAS_Unoccupied) return;
 
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -97,13 +105,64 @@ void APlayerCharacter::ExitSprint()
 
 void APlayerCharacter::Interact()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Interact is being pressed"));
+	
+	if (InteractableInPlayerRangeArray.IsValidIndex(0))
+	{
+		InteractWithInteractable(Cast<IInteractable>(InteractableInPlayerRangeArray[0]));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Interact is being pressed"));
+	}
+	
 }
 
-//void APlayerCharacter::Jump()
-//{
-//	Super::Jump();
-//}
+void APlayerCharacter::NextChat()
+{
+	UChatboxManager::onNextChat.Broadcast();
+}
+
+bool APlayerCharacter::IsInteractableWithinPlayerFov(AActor* item)
+{
+	FVector playerForwardVector = this->GetActorForwardVector();
+	FVector toItem = (item->GetActorLocation() - this->GetActorLocation());
+
+	float dot = FVector::DotProduct(playerForwardVector, toItem);
+
+	if (dot >= playerFovRange)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Item is in front of player"));
+		InteractableInPlayerRangeArray.Add(item);
+		return true;
+	}
+
+	return false;
+}
+
+AActor* APlayerCharacter::RemoveInteractableFromPlayerRange(AActor* item)
+{
+	InteractableInPlayerRangeArray.Remove(item);
+	return item;
+}
+
+void APlayerCharacter::InteractWithInteractable(IInteractable * item)
+{
+	// for now this is hard codded to work on pick up item
+	// need to expend and make this work with all item and being interactable
+	// writing for what will work for now 
+	item->Interact();
+	// commiting remove intreactable function out need a way to remove intreactable that is one use on the base item itself
+	//InteractableInPlayerRangeArray.Remove(item);
+	//// prob wanna disable instead of destroy down the line for optamization
+	//item->Destroy();
+}
+
+TArray<IInteractable*> APlayerCharacter::GetAllInteractableInPlayerFovInArray()
+{
+	TArray<IInteractable*> allInteractableInPlayerFov;
+
+	return allInteractableInPlayerFov;
+}
 
 void APlayerCharacter::InitPlayerCharacter()
 {
@@ -119,11 +178,15 @@ void APlayerCharacter::InitPlayerCharacter()
 
 	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::SprintInputAction, ETriggerEvent::Completed, this, &APlayerCharacter::ExitSprint);
 
-	//playerInputComponent->SetupInputBinding(playerController, InputActionEnum::JumpInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Jump);
-
 	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::LookInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 
 	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::InteractInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Interact);
+
+	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::AttackInputAction, ETriggerEvent::Started, this, &APlayerCharacter::NextChat);
+
+	playerChatboxWidget = CreateWidget<UChatboxWidget>(playerController, chatboxWidgetClass);
+
+	playerChatboxWidget->AddToViewport();
 }
 
 
