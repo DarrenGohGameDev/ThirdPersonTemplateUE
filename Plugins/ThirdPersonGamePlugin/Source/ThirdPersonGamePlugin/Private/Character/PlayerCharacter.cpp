@@ -105,7 +105,6 @@ void APlayerCharacter::ExitSprint()
 
 void APlayerCharacter::Interact()
 {
-	
 	if (InteractableInPlayerRangeArray.IsValidIndex(0))
 	{
 		InteractWithInteractable(Cast<IInteractable>(InteractableInPlayerRangeArray[0]));
@@ -166,7 +165,18 @@ TArray<IInteractable*> APlayerCharacter::GetAllInteractableInPlayerFovInArray()
 
 void APlayerCharacter::InitPlayerCharacter()
 {
+	if (!IsLocallyControlled())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("InitPlayerCharacter: Skipping input setup (not locally controlled)"));
+		return;
+	}
+
 	APlayerController* playerController = Cast<APlayerController>(GetController());
+	if (!playerController)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("InitPlayerCharacter: No controller"));
+		return;
+	}
 
 	playerInputComponent->SetupInputBinding(playerController, InputActionEnum::WalkInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
 
