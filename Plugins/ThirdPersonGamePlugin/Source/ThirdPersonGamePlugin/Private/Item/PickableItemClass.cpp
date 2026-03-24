@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Interface/PlayerInteractInterface.h"
 #include "Components/WorldObjectInteractableDetectionComponent.h"
+#include "Character//PlayerCharacter.h"
 
 APickableItemClass::APickableItemClass()
 {
@@ -39,7 +40,7 @@ float APickableItemClass::TransformSin()
 	return itemFloatingAmplitude * FMath::Sin(itemFloatingRunningTimeFloat * itemFloatingTimeConstant);
 }
 
-void APickableItemClass::Interact()
+void APickableItemClass::Interact(APlayerCharacter* interactedPlayer)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Item is being Picked up"));
 	ItemPickedUp();

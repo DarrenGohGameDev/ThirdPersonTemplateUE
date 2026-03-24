@@ -6,6 +6,8 @@
 #include "UI/Chatbox/ChatboxData.h"
 #include "Kismet/GameplayStatics.h"
 #include "UI/Chatbox/ChatboxManager.h"
+#include "Character/PlayerCharacter.h"
+
 
 UChatboxWidget::UChatboxWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -20,7 +22,16 @@ void UChatboxWidget::NativeConstruct()
 	UChatboxManager::onLeaveConversation.AddUObject(this, &UChatboxWidget::StopChatting);
 	UChatboxManager::onNextChat.AddUObject(this, &UChatboxWidget::NextChat);
 
-	StopChatting();
+	if (APlayerController* PC = GetOwningPlayer())
+	{
+		if (APlayerCharacter* Player = Cast<APlayerCharacter>(PC->GetPawn()))
+		{
+			chatboxOwner = Player;
+		}
+	}
+
+	ToggleChatbox(false);
+	ResetChatbox();
 }
 
 void UChatboxWidget::NativeDestruct()
@@ -32,29 +43,39 @@ void UChatboxWidget::NativeDestruct()
 	UChatboxManager::onNextChat.RemoveAll(this);
 }
 
-void UChatboxWidget::StartChatting(TArray<FChatboxData> chatboxData)
+void UChatboxWidget::StartChatting(APlayerCharacter * player ,TArray<FChatboxData> chatboxData)
 {
+	if (chatboxOwner != player)
+		return;
+
 	ToggleChatbox(true);
 	currentConversationArray = chatboxData;
 	ResetChatbox();
-	NextChat();
+	NextChat(player);
 }
 
-void UChatboxWidget::StopChatting()
+void UChatboxWidget::StopChatting(APlayerCharacter* player)
 {
+	if (chatboxOwner != player)
+		return;
+
 	ToggleChatbox(false);
 	ResetChatbox();
 }
 
-void UChatboxWidget::NextChat()
+void UChatboxWidget::NextChat(APlayerCharacter* player)
 {
+	if (chatboxOwner != player)
+		return;
+
 	if (this->GetVisibility() != ESlateVisibility::Visible)
 		return;
+
 	currentLetterIndex = 0;
 
 	if (currentConversationCounter >= currentConversationArray.Num())
 	{
-		StopChatting();
+		StopChatting(player);
 		return;
 	}
 
@@ -80,6 +101,7 @@ void UChatboxWidget::StartTypeWriterEffectOnChatboxText(FString msg)
 	currentTypeWriterEffectText.Empty();
 	typeWriterEffectLetterArray.Empty();
 	StopTypeWriterEffect();
+
 	for (int i = 0; i < msg.Len(); i++)
 	{
 		typeWriterEffectLetterArray.Add(msg.Mid(i,1));

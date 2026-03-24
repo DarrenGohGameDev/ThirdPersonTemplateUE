@@ -9,6 +9,7 @@
 class USphereComponent;
 class IPlayerInteractInterface;
 class UWorldObjectInteractableDetectionComponent;
+class APlayerCharacter;
 /**
  * 
  */
@@ -21,7 +22,7 @@ public :
 
 	APickableItemClass();
 
-	virtual void Interact() override;
+	virtual void Interact(APlayerCharacter* interactedPlayer) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "InteractDetection")
 	UWorldObjectInteractableDetectionComponent* interactableDetectionComponent;

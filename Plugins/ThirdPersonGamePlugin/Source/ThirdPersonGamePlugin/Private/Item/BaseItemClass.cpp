@@ -4,6 +4,7 @@
 #include "Item/BaseItemClass.h"
 #include "Item/ItemAttributeSet.h"
 #include "AbilitySystemComponent.h"
+#include "Character//PlayerCharacter.h"
 
 // Sets default values
 ABaseItemClass::ABaseItemClass()
@@ -37,7 +38,7 @@ void ABaseItemClass::Tick(float DeltaTime)
 
 }
 
-void ABaseItemClass::Interact()
+void ABaseItemClass::Interact(APlayerCharacter* interactedPlayer)
 {
 
 }

@@ -9,6 +9,7 @@
 
 
 class USphereComponent;
+class APlayerCharacter;
 /**
  * 
  */
@@ -31,5 +32,5 @@ protected :
 
 	virtual void BeginPlay() override;
 
-	virtual void Interact() override;
+	virtual void Interact(APlayerCharacter* interactedPlayer) override;
 };

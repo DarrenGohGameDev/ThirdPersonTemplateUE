@@ -2,6 +2,7 @@
 
 
 #include "UI/Chatbox/ChatboxManager.h"
+#include "Character/PlayerCharacter.h"
 
 FOnStartConversation UChatboxManager::onStartConversation;
 FOnLeaveConversation UChatboxManager::onLeaveConversation;
@@ -17,12 +18,11 @@ UChatboxManager::UChatboxManager()
 	// ...
 }
 
-
 // Called when the game starts
 void UChatboxManager::BeginPlay()
 {
 	Super::BeginPlay();
-
+	chatboxOwner = GetOwner();
 	// ...
 	
 }

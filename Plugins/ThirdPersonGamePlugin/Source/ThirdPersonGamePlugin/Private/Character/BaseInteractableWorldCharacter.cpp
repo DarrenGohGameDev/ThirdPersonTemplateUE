@@ -3,6 +3,7 @@
 
 #include "Character/BaseInteractableWorldCharacter.h"
 #include "Components/SphereComponent.h"
+#include "Character//PlayerCharacter.h"
 
 ABaseInteractableWorldCharacter::ABaseInteractableWorldCharacter()
 {
@@ -18,7 +19,7 @@ void ABaseInteractableWorldCharacter::BeginPlay()
 	interactDetectionSphere->SetSphereRadius(interactDetectionRange);
 }
 
-void ABaseInteractableWorldCharacter::Interact()
+void ABaseInteractableWorldCharacter::Interact(APlayerCharacter* interactedPlayer)
 {
 
 }

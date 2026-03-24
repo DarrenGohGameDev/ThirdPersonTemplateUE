@@ -2,10 +2,11 @@
 
 
 #include "Interface/Interactable.h"
+#include "Character/PlayerCharacter.h"
 
 // Add default functionality here for any IInteractable functions that are not pure virtual.
 
-void IInteractable::Interact()
+void IInteractable::Interact(APlayerCharacter* interactedPlayer)
 {
 
 }

@@ -118,7 +118,7 @@ void APlayerCharacter::Interact()
 
 void APlayerCharacter::NextChat()
 {
-	UChatboxManager::onNextChat.Broadcast();
+	UChatboxManager::onNextChat.Broadcast(this);
 }
 
 bool APlayerCharacter::IsInteractableWithinPlayerFov(AActor* item)
@@ -149,7 +149,7 @@ void APlayerCharacter::InteractWithInteractable(IInteractable * item)
 	// for now this is hard codded to work on pick up item
 	// need to expend and make this work with all item and being interactable
 	// writing for what will work for now 
-	item->Interact();
+	item->Interact(this);
 	// commiting remove intreactable function out need a way to remove intreactable that is one use on the base item itself
 	//InteractableInPlayerRangeArray.Remove(item);
 	//// prob wanna disable instead of destroy down the line for optamization

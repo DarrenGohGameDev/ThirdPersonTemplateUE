@@ -15,6 +15,7 @@ class UVerticalBox;
 class USoundBase;
 class UButton;
 struct FChatboxData;
+class APlayerCharacter;
 
 UCLASS()
 class THIRDPERSONGAMEPLUGIN_API UChatboxWidget : public UUserWidget
@@ -60,11 +61,13 @@ private :
 
 	TArray<FString> typeWriterEffectLetterArray;
 
-	void StartChatting(TArray<FChatboxData> chatboxData);
+	APlayerCharacter* chatboxOwner;
 
-	void StopChatting();
+	void StartChatting(APlayerCharacter* player ,TArray<FChatboxData> chatboxData);
 
-	void NextChat();
+	void StopChatting(APlayerCharacter* player);
+
+	void NextChat(APlayerCharacter* player);
 
 	void SetChatboxText(FString tittle ,FString msg);
 

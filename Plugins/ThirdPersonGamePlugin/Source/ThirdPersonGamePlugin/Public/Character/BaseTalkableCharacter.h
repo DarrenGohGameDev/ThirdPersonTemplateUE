@@ -28,7 +28,7 @@ protected :
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "InteractDetection")
 	UWorldObjectInteractableDetectionComponent* interactableDetectionComponent;
 
-	virtual void Interact() override;
+	virtual void Interact(APlayerCharacter* interactedPlayer) override;
 
 	virtual void BeginPlay() override;
 

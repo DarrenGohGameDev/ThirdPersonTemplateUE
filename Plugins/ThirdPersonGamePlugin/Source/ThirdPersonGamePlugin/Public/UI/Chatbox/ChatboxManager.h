@@ -8,11 +8,13 @@
 #include "UI/Chatbox/ChatboxData.h"
 #include "ChatboxManager.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnStartConversation,TArray<FChatboxData>);
+class APlayerCharacter;
 
-DECLARE_MULTICAST_DELEGATE(FOnLeaveConversation);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnStartConversation, APlayerCharacter*,TArray<FChatboxData>);
 
-DECLARE_MULTICAST_DELEGATE(FOnNextChat);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnLeaveConversation, APlayerCharacter*);
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnNextChat, APlayerCharacter*);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THIRDPERSONGAMEPLUGIN_API UChatboxManager : public UActorComponent
@@ -33,5 +35,9 @@ public:
 protected:
 
 	virtual void BeginPlay() override;
+
+private:
+
+	AActor * chatboxOwner;
 
 };

@@ -9,6 +9,7 @@
 
 class UItemAttributeSet;
 class UAbilitySystemComponent;
+class APlayerCharacter;
 
 UCLASS()
 class THIRDPERSONGAMEPLUGIN_API ABaseItemClass : public AActor , public IInteractable
@@ -22,7 +23,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void Interact() override;
+	virtual void Interact(APlayerCharacter* interactedPlayer) override;
 
 	virtual void UseItem();
 

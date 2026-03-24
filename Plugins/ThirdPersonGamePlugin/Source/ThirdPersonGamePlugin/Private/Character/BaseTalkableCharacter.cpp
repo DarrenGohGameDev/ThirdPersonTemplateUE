@@ -7,6 +7,7 @@
 #include "Components/WorldObjectInteractableDetectionComponent.h"
 #include "Components/SphereComponent.h"
 #include "Interface/PlayerInteractInterface.h"
+#include "Character/PlayerCharacter.h"
 
 ABaseTalkableCharacter::ABaseTalkableCharacter()
 {
@@ -18,9 +19,9 @@ ABaseTalkableCharacter::ABaseTalkableCharacter()
 	interactableDetectionComponent->interactDetectionSphere->SetupAttachment(GetRootComponent());
 }
 
-void ABaseTalkableCharacter::Interact()
+void ABaseTalkableCharacter::Interact(APlayerCharacter* interactedPlayer)
 {
-	UChatboxManager::onStartConversation.Broadcast(chatBoxConversationComponent->GetConversationArray());
+	UChatboxManager::onStartConversation.Broadcast(interactedPlayer,chatBoxConversationComponent->GetConversationArray());
 	interactableDetectionComponent->playerPickUpInterface->RemoveInteractableFromPlayerRange(this);
 }
 
@@ -32,5 +33,8 @@ void ABaseTalkableCharacter::BeginPlay()
 
 void ABaseTalkableCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	UChatboxManager::onLeaveConversation.Broadcast();
+	if (APlayerCharacter* player = Cast<APlayerCharacter>(OtherActor))
+	{
+		UChatboxManager::onLeaveConversation.Broadcast(player);
+	}
 }
