@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Character/PlayerCharacter.h"
@@ -144,7 +144,7 @@ AActor* APlayerCharacter::RemoveInteractableFromPlayerRange(AActor* item)
 	return item;
 }
 
-void APlayerCharacter::InteractWithInteractable(IInteractable * item)
+void APlayerCharacter::InteractWithInteractable(IInteractable* item)
 {
 	// for now this is hard codded to work on pick up item
 	// need to expend and make this work with all item and being interactable
@@ -154,6 +154,20 @@ void APlayerCharacter::InteractWithInteractable(IInteractable * item)
 	//InteractableInPlayerRangeArray.Remove(item);
 	//// prob wanna disable instead of destroy down the line for optamization
 	//item->Destroy();
+}
+
+void APlayerCharacter::Server_RequestPickup_Implementation(APickableItemClass* Item)
+{
+    if (!Item)
+        return;
+
+    UE_LOG(LogTemp, Warning, TEXT("Server_RequestPickup running"));
+
+    float Distance = FVector::Dist(GetActorLocation(), Item->GetActorLocation());
+    if (Distance > 300.f)
+        return;
+
+    Item->ItemPickedUp(); // ✅ server controls item
 }
 
 TArray<IInteractable*> APlayerCharacter::GetAllInteractableInPlayerFovInArray()

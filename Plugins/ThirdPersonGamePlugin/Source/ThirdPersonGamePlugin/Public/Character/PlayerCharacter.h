@@ -36,6 +36,9 @@ public :
 
 	virtual bool IsInteractableWithinPlayerFov(AActor* item) override;
 
+	UFUNCTION(Server, Reliable)
+	void Server_RequestPickup(APickableItemClass* Item);
+
 	virtual AActor* RemoveInteractableFromPlayerRange(AActor* item) override;
 
 protected :
@@ -76,6 +79,8 @@ protected :
 	void NextChat();
 
 	virtual void InteractWithInteractable(IInteractable * item) override;
+
+	//virtual void InteractWithPickable(APickableItemClass* item);
 
 	virtual TArray<IInteractable*>  GetAllInteractableInPlayerFovInArray() override;
 

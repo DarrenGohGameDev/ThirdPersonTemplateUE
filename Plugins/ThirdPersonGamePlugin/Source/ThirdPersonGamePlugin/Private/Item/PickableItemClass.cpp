@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Item/PickableItemClass.h"
@@ -18,6 +18,7 @@ APickableItemClass::APickableItemClass()
 	interactableDetectionComponent->SetupAttachment(RootComponent);
 
 	interactableDetectionComponent->interactDetectionSphere->SetupAttachment(RootComponent);
+	bReplicates = true;
 }
 
 void APickableItemClass::BeginPlay()
@@ -42,8 +43,15 @@ float APickableItemClass::TransformSin()
 
 void APickableItemClass::Interact(APlayerCharacter* interactedPlayer)
 {
+	if (!interactedPlayer)
+		return;
+
+	//// ✅ VERY IMPORTANT: only local player sends request
+	//if (!interactedPlayer->IsLocallyControlled())
+	//	return;
+
 	UE_LOG(LogTemp, Warning, TEXT("Item is being Picked up"));
-	ItemPickedUp();
+	interactedPlayer->Server_RequestPickup(this);
 }
 
 void APickableItemClass::OverlapWithPlayer()
@@ -53,6 +61,9 @@ void APickableItemClass::OverlapWithPlayer()
 
 void APickableItemClass::ItemPickedUp()
 {
+	if (!HasAuthority())
+		return;
+
 	interactableDetectionComponent->playerPickUpInterface->RemoveInteractableFromPlayerRange(this);
 	this->Destroy();
 }
