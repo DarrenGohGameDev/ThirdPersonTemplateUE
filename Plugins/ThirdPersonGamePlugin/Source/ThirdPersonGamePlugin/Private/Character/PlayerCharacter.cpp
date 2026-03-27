@@ -167,7 +167,7 @@ void APlayerCharacter::Server_RequestPickup_Implementation(APickableItemClass* I
     if (Distance > 300.f)
         return;
 
-    Item->ItemPickedUp(); // ✅ server controls item
+    Item->ItemPickedUp();
 }
 
 TArray<IInteractable*> APlayerCharacter::GetAllInteractableInPlayerFovInArray()

@@ -46,9 +46,8 @@ void APickableItemClass::Interact(APlayerCharacter* interactedPlayer)
 	if (!interactedPlayer)
 		return;
 
-	//// ✅ VERY IMPORTANT: only local player sends request
-	//if (!interactedPlayer->IsLocallyControlled())
-	//	return;
+	if (!interactedPlayer->IsLocallyControlled())
+		return;
 
 	UE_LOG(LogTemp, Warning, TEXT("Item is being Picked up"));
 	interactedPlayer->Server_RequestPickup(this);
