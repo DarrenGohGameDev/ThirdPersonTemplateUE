@@ -24,6 +24,8 @@ public :
 
 	virtual void Interact(APlayerCharacter* interactedPlayer) override;
 
+	void ItemPickedUp();
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "InteractDetection")
 	UWorldObjectInteractableDetectionComponent* interactableDetectionComponent;
 
@@ -54,7 +56,7 @@ protected :
 
 	void OverlapWithPlayer();
 
-	void ItemPickedUp();
+	
 
 private :
 
